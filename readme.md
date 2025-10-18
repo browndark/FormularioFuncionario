@@ -21,3 +21,6 @@ docker run --rm -p 8080:80 funcionarios-app
 
 python -m http.server 8080
 Acesse: http://localhost:8080
+
+Link do banco de dados do firebase: https://console.firebase.google.com/u/0/project/funcionario-fd1cd/firestore/databases/-default-/data/~2Ffuncionarios~2FdRMZ9Cs1NxcFjJgmB3g3
+< https://console.firebase.google.com/u/0/>
