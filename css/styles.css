@@ -1,0 +1,280 @@
+/* ===========================
+   Tema e variáveis globais
+=========================== */
+:root {
+  --bg: #0b0f14;
+  --card: #121826;
+  --muted: #93a1b1;
+  --text: #e6edf3;
+  --accent: #79c0ff;
+  --border: #1f2937;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --hover: rgba(255, 255, 255, 0.05);
+  --focus: rgba(121, 192, 255, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===========================
+   Estrutura e Layout
+=========================== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--accent);
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0.25rem 0 0;
+}
+
+/* ===========================
+   Cartões e seções
+=========================== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--accent);
+  font-size: 1.3rem;
+}
+
+/* ===========================
+   Formulários
+=========================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="search"] {
+  background: #0f172a;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+input::placeholder {
+  color: #6b7280;
+}
+
+/* ===========================
+   Botões
+=========================== */
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+button {
+  border: 1px solid var(--border);
+  background: #1f2937;
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+
+button:hover {
+  background: var(--hover);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+  opacity: 0.85;
+}
+
+button.secondary {
+  background: #111827;
+  color: var(--muted);
+}
+
+button.warn {
+  background: #2b2414;
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+button.danger {
+  background: #241414;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+button.ok {
+  background: #0f2a19;
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
+/* ===========================
+   Tabela
+=========================== */
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-wrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+thead th {
+  text-align: left;
+  padding: 0.75rem;
+  background: #0f172a;
+  color: #9fb3c8;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 500;
+}
+
+tbody td {
+  padding: 0.7rem 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+tbody tr:hover {
+  background: var(--hover);
+}
+
+tfoot td {
+  padding: 0.5rem 0.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.actions-row {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* ===========================
+   Relatórios
+=========================== */
+.reports {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .reports { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .reports { grid-template-columns: 1fr; }
+}
+
+.report {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: #0f172a;
+}
+
+.report h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.report ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.report li {
+  padding: 0.2rem 0;
+  color: var(--text);
+}
+
+/* ===========================
+   Rodapé
+=========================== */
+.footer {
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}

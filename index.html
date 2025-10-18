@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Gestão de Funcionários</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="container">
+    <h1>Sistema de Gestão de Funcionários</h1>
+    <p class="subtitle">Cadastro, edição, exclusão e relatórios (Firebase)</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Cadastro / Edição</h2>
+      <form id="form-funcionario">
+        <input type="hidden" id="id" />
+        <div class="grid">
+          <label>
+            Nome
+            <input type="text" id="nome" placeholder="Ex.: Ana Lima" required />
+          </label>
+          <label>
+            Idade
+            <input type="number" id="idade" min="14" max="120" placeholder="Ex.: 28" required />
+          </label>
+          <label>
+            Cargo
+            <input type="text" id="cargo" placeholder="Ex.: Desenvolvedora" required />
+          </label>
+          <label>
+            Salário (R$)
+            <input type="number" id="salario" min="0" step="0.01" placeholder="Ex.: 7500.00" required />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit">Cadastrar</button>
+          <button type="button" id="btn-limpar" class="secondary">Limpar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="table-header">
+        <h2>Funcionários</h2>
+        <input type="search" id="busca" placeholder="Buscar..." />
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Idade</th>
+              <th>Cargo</th>
+              <th>Salário</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-funcionarios"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    <small>Feito com HTML, CSS e JavaScript + Firebase.</small>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
