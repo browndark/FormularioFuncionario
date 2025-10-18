@@ -15,9 +15,6 @@ App front-end puro (sem backend), com **cadastro, listagem, edição, exclusão*
 - Versionar no GitHub.
 
 ```bash
-# na raiz do projeto (onde está o Dockerfile)
-docker build -t funcionarios-app .
-docker run --rm -p 8080:80 funcionarios-app
-
-python -m http.server 8080
-Acesse: http://localhost:8080
+O projeto está ligado no banco de dados do Firebase:
+https://console.firebase.google.com/u/0/
+onde será anexado o cadastro do funcionario
