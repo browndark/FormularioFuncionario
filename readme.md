@@ -1,4 +1,4 @@
-# Sistema de Gestão de Funcionários (HTML/CSS/JS + Docker)
+# Sistema de Gestão de Funcionários (HTML/CSS/JS + Firebase)
 
 App front-end puro (sem backend), com **cadastro, listagem, edição, exclusão** e **relatórios** usando `map`, `filter` e `reduce`. Dados persistem em `localStorage`.
 
