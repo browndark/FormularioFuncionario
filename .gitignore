@@ -1,0 +1,21 @@
+# Pasta de estudos (não enviar para repositório)
+estudos/
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Logs
+*.log
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de editor
+.vscode/
+*.swp
+*.swo
+
+# Cache
+.cache/

@@ -1,21 +1,5 @@
-// Importa SDKs Firebase (modo módulo)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-// === Configuração do seu projeto Firebase ===
-const firebaseConfig = {
-  apiKey: "AIzaSyCxLtIROIZtsYEiOxuFY88eNAR64iEnN5w",
-  authDomain: "funcionario-fd1cd.firebaseapp.com",
-  projectId: "funcionario-fd1cd",
-  storageBucket: "funcionario-fd1cd.firebasestorage.app",
-  messagingSenderId: "560843562153",
-  appId: "1:560843562153:web:d4fd518924b44812dd1db8",
-  measurementId: "G-MT6FLY5MJ5"
-};
-
-// Inicializa o Firebase e o Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// ===== SISTEMA DE CADASTRO DE FUNCIONÁRIOS COM LOCALSTORAGE =====
+// Sistema completo de CRUD (Create, Read, Update, Delete) usando localStorage
 
 // === Seletores do DOM ===
 const form = document.getElementById("form-funcionario");
@@ -26,29 +10,47 @@ const inputIdade = document.getElementById("idade");
 const inputCargo = document.getElementById("cargo");
 const inputSalario = document.getElementById("salario");
 
+// === Variável global para controle de edição ===
+let funcionarioEditandoId = null;
+
+// === Funções para localStorage ===
+function salvarNoLocalStorage(funcionarios) {
+  localStorage.setItem('funcionarios', JSON.stringify(funcionarios));
+}
+
+function carregarDoLocalStorage() {
+  const dados = localStorage.getItem('funcionarios');
+  return dados ? JSON.parse(dados) : [];
+}
+
+function gerarId() {
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+}
+
 // === Renderização da Tabela ===
-async function carregarFuncionarios() {
+function carregarFuncionarios() {
   tbody.innerHTML = "";
-  const snapshot = await getDocs(collection(db, "funcionarios"));
-  snapshot.forEach((docSnap) => {
-    const f = docSnap.data();
+  const funcionarios = carregarDoLocalStorage();
+  
+  funcionarios.forEach(funcionario => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${f.nome}</td>
-      <td>${f.idade}</td>
-      <td>${f.cargo}</td>
-      <td>R$ ${Number(f.salario).toFixed(2)}</td>
+      <td>${funcionario.nome}</td>
+      <td>${funcionario.idade}</td>
+      <td>${funcionario.cargo}</td>
+      <td>R$ ${Number(funcionario.salario).toFixed(2)}</td>
       <td>
-        <button class="warn" onclick="editarFuncionario('${docSnap.id}', '${f.nome}', ${f.idade}, '${f.cargo}', ${f.salario})">Editar</button>
-        <button class="danger" onclick="excluirFuncionario('${docSnap.id}')">Excluir</button>
+        <button class="warn" onclick="editarFuncionario('${funcionario.id}')">Editar</button>
+        <button class="danger" onclick="excluirFuncionario('${funcionario.id}')">Excluir</button>
       </td>`;
     tbody.appendChild(tr);
   });
 }
 
-// === Adicionar ou Atualizar ===
-form.addEventListener("submit", async (e) => {
+// === Adicionar ou Atualizar Funcionário ===
+form.addEventListener("submit", (e) => {
   e.preventDefault();
+  
   const nome = inputNome.value.trim();
   const idade = Number(inputIdade.value);
   const cargo = inputCargo.value.trim();
@@ -59,45 +61,83 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  await addDoc(collection(db, "funcionarios"), { nome, idade, cargo, salario });
+  const funcionarios = carregarDoLocalStorage();
+
+  if (funcionarioEditandoId) {
+    // Modo edição
+    const index = funcionarios.findIndex(f => f.id === funcionarioEditandoId);
+    if (index !== -1) {
+      funcionarios[index] = {
+        id: funcionarioEditandoId,
+        nome, idade, cargo, salario
+      };
+      salvarNoLocalStorage(funcionarios);
+      alert("Funcionário atualizado com sucesso!");
+      
+      // Resetar modo edição
+      funcionarioEditandoId = null;
+      const btnSubmit = form.querySelector('button[type="submit"]');
+      btnSubmit.textContent = "Cadastrar Funcionário";
+    }
+  } else {
+    // Modo criação
+    const novoFuncionario = {
+      id: gerarId(),
+      nome, idade, cargo, salario
+    };
+    funcionarios.push(novoFuncionario);
+    salvarNoLocalStorage(funcionarios);
+    alert("Funcionário cadastrado com sucesso!");
+  }
+
   form.reset();
   carregarFuncionarios();
-  alert("Funcionário cadastrado com sucesso!");
 });
 
-// === Editar ===
-window.editarFuncionario = (id, nome, idade, cargo, salario) => {
-  inputNome.value = nome;
-  inputIdade.value = idade;
-  inputCargo.value = cargo;
-  inputSalario.value = salario;
-
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-    await updateDoc(doc(db, "funcionarios", id), {
-      nome: inputNome.value,
-      idade: Number(inputIdade.value),
-      cargo: inputCargo.value,
-      salario: Number(inputSalario.value),
-    });
-    form.reset();
-    form.onsubmit = null;
-    form.addEventListener("submit", salvar);
-    carregarFuncionarios();
-    alert("Funcionário atualizado!");
-  };
-};
-
-// === Excluir ===
-window.excluirFuncionario = async (id) => {
-  if (confirm("Deseja excluir este funcionário?")) {
-    await deleteDoc(doc(db, "funcionarios", id));
-    carregarFuncionarios();
+// === Editar Funcionário ===
+window.editarFuncionario = (id) => {
+  const funcionarios = carregarDoLocalStorage();
+  const funcionario = funcionarios.find(f => f.id === id);
+  
+  if (funcionario) {
+    inputNome.value = funcionario.nome;
+    inputIdade.value = funcionario.idade;
+    inputCargo.value = funcionario.cargo;
+    inputSalario.value = funcionario.salario;
+    
+    funcionarioEditandoId = id;
+    
+    // Alterar texto do botão para indicar modo edição
+    const btnSubmit = form.querySelector('button[type="submit"]');
+    btnSubmit.textContent = "Atualizar Funcionário";
   }
 };
 
-// === Limpar ===
-btnLimpar.onclick = () => form.reset();
+// === Excluir Funcionário ===
+window.excluirFuncionario = (id) => {
+  if (confirm("Deseja excluir este funcionário?")) {
+    const funcionarios = carregarDoLocalStorage();
+    const funcionariosFiltrados = funcionarios.filter(f => f.id !== id);
+    
+    salvarNoLocalStorage(funcionariosFiltrados);
+    carregarFuncionarios();
+    alert("Funcionário excluído com sucesso!");
+  }
+};
 
-// === Inicialização ===
-carregarFuncionarios();
+// === Limpar Formulário ===
+btnLimpar.onclick = () => {
+  form.reset();
+  funcionarioEditandoId = null;
+  
+  // Restaurar texto original do botão
+  const btnSubmit = form.querySelector('button[type="submit"]');
+  btnSubmit.textContent = "Cadastrar Funcionário";
+};
+
+// === Inicialização do Sistema ===
+document.addEventListener('DOMContentLoaded', () => {
+  carregarFuncionarios();
+  console.log('Sistema inicializado com localStorage');
+  console.log('Funcionários carregados:', carregarDoLocalStorage().length);
+});
